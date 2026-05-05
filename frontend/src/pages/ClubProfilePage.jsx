@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { API } from "../api";
 import { errorAlert } from "../utils/alerts";
+import MediaGallery from "../components/MediaGallery";
+import MediaUpload from "../components/MediaUpload";
 
 export default function ClubProfilePage() {
   const { id } = useParams();
@@ -11,6 +13,7 @@ export default function ClubProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [joining, setJoining] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
 
   // Fetch club data on component mount
   useEffect(() => {
@@ -245,6 +248,16 @@ export default function ClubProfilePage() {
           )}
         </div>
       </div>
+      {/* Media Gallery Section */}
+      <MediaGallery clubId={id} />
+      {/* Upload Modal */}
+      {showUpload && (
+        <MediaUpload
+          clubId={id}
+          onClose={() => setShowUpload(false)}
+          onUploadSuccess={() => {}}
+        />
+      )}
 
       {/* Action Buttons */}
       <div className="button-row">
