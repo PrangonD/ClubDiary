@@ -499,14 +499,8 @@ select:focus {
 }
 
 .club-category {
-  display: inline-block;
-  margin-left: 8px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #7c3aed;
-  background: rgba(124, 58, 237, 0.12);
-  border-radius: var(--radius-pill);
-  padding: 2px 8px;
+  padding-left: 8px;
+  vertical-align: middle;
 }
 
 .empty-state {
@@ -1355,18 +1349,399 @@ body {
   background-color: var(--color-primary);
   border-radius: 8px;
   cursor: pointer;
-  padding: 10px 16px;
+  padding: 8px 14px;
   transition: all ease-in-out 0.2s;
-  font-size: 14px;
+  font-size: 13px;
   color: white;
   font-weight: 600;
   white-space: nowrap;
+  width: auto !important;
+  min-width: auto !important;
+  margin: 0 !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
 .create-btn:hover {
   background-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
 
 .create-btn:active {
   transform: scale(0.98);
+}
+
+/* Club table styles */
+.clubs-table-container {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.clubs-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.clubs-table th {
+  background: #f8fafc;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.clubs-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.clubs-table tr:last-child td {
+  border-bottom: none;
+}
+
+.club-row:hover {
+  background: #f8fafc;
+}
+
+.club-name strong {
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.club-category {
+  vertical-align: middle;
+}
+
+.category-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.12);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+.club-description {
+  vertical-align: middle;
+}
+
+.desc-text {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.club-members {
+  vertical-align: middle;
+}
+
+.member-count {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.club-actions {
+  vertical-align: middle;
+}
+
+.btn-icon {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  border: none !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin-right: 6px !important;
+}
+
+.btn-icon:last-child {
+  margin-right: 0 !important;
+}
+
+.btn-edit {
+  background: #eef2ff !important;
+  color: #4f46e5 !important;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.15) !important;
+}
+
+.btn-edit:hover {
+  background: #e0e7ff !important;
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.25) !important;
+  transform: translateY(-1px);
+}
+
+.btn-delete {
+  background: #fef2f2 !important;
+  color: #ef4444 !important;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.15) !important;
+}
+
+.btn-delete:hover {
+  background: #fee2e2 !important;
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.25) !important;
+  transform: translateY(-1px);
+}
+
+.filter-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group {
+  min-width: 150px;
+}
+
+.search-input,
+.filter-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+/* Modal styles with blur background */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+  padding: 20px;
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease;
+  position: relative;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  padding: 20px 20px 10px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.modal-close {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  border: none !important;
+  background: #f8fafc !important;
+  color: #64748b !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.modal-close:hover {
+  background: #fee2e2 !important;
+  color: #ef4444 !important;
+  transform: scale(1.05);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+/* Club form styles */
+.club-form {
+  margin: 0;
+}
+
+.club-form .form-group {
+  margin-bottom: 20px;
+}
+
+.club-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.club-form input,
+.club-form select,
+.club-form textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #fff;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+}
+
+.club-form input:focus,
+.club-form select:focus,
+.club-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.club-form .input-error {
+  border-color: var(--color-error) !important;
+}
+
+.club-form .error-text {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.club-form .char-count {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.club-form .form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  justify-content: flex-end;
+}
+
+.club-form .form-actions button {
+  width: 33.333% !important;
+  min-width: auto !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 !important;
+}
+
+.club-form .btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    #4f46e5 100%
+  ) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25) !important;
+}
+
+.club-form .btn-primary:hover:not(:disabled) {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-hover) 0%,
+    #4338ca 100%
+  ) !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+.club-form .btn-primary:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.club-form .btn-secondary {
+  background: #f8fafc !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1) !important;
+}
+
+.club-form .btn-secondary:hover:not(:disabled) {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  transform: translateY(-1px);
+}
+
+.club-form .btn-secondary:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.search-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
