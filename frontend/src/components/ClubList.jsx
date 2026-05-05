@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function ClubList({
   clubs,
   loading,
@@ -67,7 +69,11 @@ export default function ClubList({
                   className="btn-icon btn-edit"
                   title="Edit club"
                 >
-                  ✏️
+                  <img
+                    src="/assets/edit.png"
+                    alt="Edit"
+                    style={{ width: "18px", height: "18px" }}
+                  />
                 </button>
                 <button
                   type="button"
@@ -75,7 +81,23 @@ export default function ClubList({
                   className="btn-icon btn-delete"
                   title="Delete club"
                 >
-                  🗑️
+                  <img
+                    src="/assets/delete.png"
+                    alt="Delete"
+                    style={{ width: "18px", height: "18px" }}
+                  />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = `/clubs/${club._id}`)}
+                  className="btn-icon btn-view"
+                  title="View club"
+                >
+                  <img
+                    src="/assets/view.png"
+                    alt="View"
+                    style={{ width: "18px", height: "18px" }}
+                  />
                 </button>
               </td>
             </tr>

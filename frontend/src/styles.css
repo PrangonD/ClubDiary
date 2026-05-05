@@ -1039,23 +1039,70 @@ body {
 .club-cover {
   height: 110px;
   background: linear-gradient(135deg, #4f46e5, #818cf8);
+  position: relative;
+}
+
+.club-cover .category-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(124, 58, 237, 0.9);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  white-space: nowrap;
 }
 
 .club-body {
   padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.club-meta {
+.club-body strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.club-body .lead-muted {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.club-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  margin-top: auto;
 }
 
-.btn-pill {
+.club-footer .meta-text {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+.club-footer .btn-pill {
   width: auto !important;
   min-width: 96px;
   margin: 0;
+}
+
+.club-name-link:hover,
+.view-link:hover {
+  color: inherit;
+  text-decoration: underline;
+  transition: filter 0.2s ease;
+}
+
+.club-name-link:hover,
+.view-link:hover {
+  filter: brightness(1.2);
 }
 
 .events-grid {
@@ -1383,6 +1430,7 @@ body {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--color-border);
+  table-layout: fixed;
 }
 
 .clubs-table th {
@@ -1394,6 +1442,22 @@ body {
   color: var(--color-text-muted);
   border-bottom: 1px solid var(--color-border);
 }
+
+.clubs-table th:nth-child(1) {
+  width: 20%;
+} /* Name */
+.clubs-table th:nth-child(2) {
+  width: 15%;
+} /* Category */
+.clubs-table th:nth-child(3) {
+  width: 40%;
+} /* Description */
+.clubs-table th:nth-child(4) {
+  width: 10%;
+} /* Members */
+.clubs-table th:nth-child(5) {
+  width: 15%;
+} /* Actions */
 
 .clubs-table td {
   padding: 12px 16px;
@@ -1437,6 +1501,11 @@ body {
   font-size: 0.88rem;
   color: var(--color-text-muted);
   line-height: 1.4;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .club-members {
@@ -1451,6 +1520,8 @@ body {
 
 .club-actions {
   vertical-align: middle;
+  white-space: nowrap;
+  min-width: 80px;
 }
 
 .btn-icon {
@@ -1484,6 +1555,18 @@ body {
 .btn-edit:hover {
   background: #e0e7ff !important;
   box-shadow: 0 4px 8px rgba(79, 70, 229, 0.25) !important;
+  transform: translateY(-1px);
+}
+
+.btn-view {
+  background: #f8fafc !important;
+  color: var(--color-text) !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15) !important;
+}
+
+.btn-view:hover {
+  background: #f1f5f9 !important;
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.25) !important;
   transform: translateY(-1px);
 }
 
@@ -1737,6 +1820,193 @@ body {
   opacity: 0.6 !important;
   cursor: not-allowed !important;
   transform: none !important;
+}
+
+/* Club Profile Page Styles */
+.club-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.club-title {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.club-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.club-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.stat-item strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.stat-item span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.events-list,
+.members-list,
+.discussions-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.event-info h4 {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.event-date {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.event-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-success);
+  background: rgba(5, 150, 105, 0.12);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-info strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.member-role {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.discussion-item {
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.discussion-item h4 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.discussion-preview {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.discussion-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 720px) {
+  .club-title {
+    font-size: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .discussion-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 }
 
 .search-input:focus,

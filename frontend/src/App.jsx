@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import EventsPage from "./pages/EventsPage";
 import AdminPanelPage from "./pages/AdminPanelPage";
 import ClubManagementPage from "./pages/ClubManagementPage";
+import ClubProfilePage from "./pages/ClubProfilePage";
 import DiscussionPage from "./pages/DiscussionPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import BlogPage from "./pages/BlogPage";
@@ -97,6 +98,14 @@ export default function App() {
                 element={
                   <ProtectedRoute roles={["Admin"]}>
                     <ClubManagementPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/clubs/:id"
+                element={
+                  <ProtectedRoute>
+                    <ClubProfilePage />
                   </ProtectedRoute>
                 }
               />

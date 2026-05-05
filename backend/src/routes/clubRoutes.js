@@ -91,6 +91,41 @@ router.get("/", async (req, res) => {
   });
 });
 
+// GET club by ID (public)
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Club ID is required" });
+    }
+
+    const club = await Club.findById(id);
+    if (!club) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+
+    // Get member count for this club
+    const memberCount = await Membership.countDocuments({
+      club: id,
+      status: "approved",
+    });
+
+    res.json({
+      _id: club._id,
+      name: club.name,
+      category: club.category,
+      description: club.description,
+      createdAt: club.createdAt,
+      updatedAt: club.updatedAt,
+      membersCount: memberCount,
+      memberCount: memberCount,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch club details" });
+  }
+});
+
 // POST create club (admin only)
 router.post("/", protect, allowRoles("Admin"), async (req, res) => {
   try {
@@ -102,11 +137,9 @@ router.post("/", protect, allowRoles("Admin"), async (req, res) => {
 
     const required = requireFields(payload, ["name"]);
     if (!required.ok) {
-      return res
-        .status(400)
-        .json({
-          message: `Missing required field(s): ${required.missing.join(", ")}`,
-        });
+      return res.status(400).json({
+        message: `Missing required field(s): ${required.missing.join(", ")}`,
+      });
     }
 
     if (payload.name.length < 1 || payload.name.length > 80) {
