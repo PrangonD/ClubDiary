@@ -1,0 +1,236 @@
+//{back end}
+// Feature 1 (Sprint 1) - User Authentication (Login/Register/JWT) - Owner: MUNEEM
+const express = require("express");
+const User = require("../models/User");
+const generateToken = require("../utils/generateToken");
+const { normalizeString, requireFields } = require("../utils/validators");
+
+const router = express.Router();
+
+router.post("/register", async (req, res) => {
+  try {
+    const payload = {
+      name: normalizeString(req.body.name, 80),
+      email: normalizeString(req.body.email, 120).toLowerCase(),
+      password: req.body.password
+    };
+
+    const required = requireFields(payload, ["name", "email", "password"]);
+    if (!required.ok) {
+      return res.status(400).json({ message: `Missing required field(s): ${required.missing.join(", ")}` });
+    }
+
+    if (payload.password.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters" });
+    }
+
+    const exists = await User.findOne({ email: payload.email });
+    if (exists) return res.status(400).json({ message: "Email already exists" });
+
+    // Security: all self-registrations are Student only.
+    const user = await User.create({
+      name: payload.name,
+      email: payload.email,
+      password: payload.password,
+      role: "Student"
+    });
+
+    return res.status(201).json({
+      token: generateToken(user._id),
+      user: { id: user._id, name: user.name, email: user.email, role: user.role }
+    });
+  } catch (_error) {
+    return res.status(500).json({ message: "Registration failed" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const email = normalizeString(req.body.email, 120).toLowerCase();
+    const password = req.body.password || "";
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+
+    const valid = await user.comparePassword(password);
+    if (!valid) return res.status(400).json({ message: "Invalid credentials" });
+
+    return res.json({
+      token: generateToken(user._id),
+      user: { id: user._id, name: user.name, email: user.email, role: user.role }
+    });
+  } catch (_error) {
+    return res.status(500).json({ message: "Login failed" });
+  }
+});
+
+
+
+
+//{front end}
+// Feature 1 (Sprint 1) - Frontend auth state + JWT session handling - Owner: MUNEEM
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { API, setToken } from "../api";
+
+const AuthContext = createContext(null);
+
+export function AuthProvider({ children }) {
+  const [auth, setAuth] = useState(() => {
+    const saved = localStorage.getItem("clubDiaryAuth");
+    return saved ? JSON.parse(saved) : { token: "", user: null };
+  });
+
+  useEffect(() => {
+    setToken(auth.token || "");
+  }, [auth.token]);
+
+  const persistAuth = (next) => {
+    setAuth(next);
+    if (next.token) localStorage.setItem("clubDiaryAuth", JSON.stringify(next));
+    else localStorage.removeItem("clubDiaryAuth");
+  };
+
+  const login = async (payload, isRegister = false) => {
+    const endpoint = isRegister ? "/auth/register" : "/auth/login";
+    const { data } = await API.post(endpoint, payload);
+    persistAuth({ token: data.token, user: data.user });
+    return data.user;
+  };
+
+  const logout = () => {
+    persistAuth({ token: "", user: null });
+  };
+
+  const patchUser = (partial) => {
+    setAuth((prev) => {
+      if (!prev.user) return prev;
+      const next = { ...prev, user: { ...prev.user, ...partial } };
+      localStorage.setItem("clubDiaryAuth", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const value = useMemo(() => ({ auth, login, logout, patchUser }), [auth]);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export const useAuth = () => useContext(AuthContext);
+
+
+
+//login page
+// Feature 1 (Sprint 1) - Login UI - Owner: MUNEEM
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+export default function LoginPage() {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      setBusy(true);
+      await login(form);
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="auth-page">
+      <form className="card" onSubmit={submit}>
+        <h2 className="auth-title">Welcome back</h2>
+        <p className="lead-muted">Sign in to your club account</p>
+        <input type="email" placeholder="Email" onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
+        />
+        {error && <p className="error">{error}</p>}
+        <button type="submit" disabled={busy}>
+          {busy ? "Signing in..." : "Login"}
+        </button>
+        <p className="auth-footnote">
+          New user? <Link to="/register">Register here</Link>
+        </p>
+      </form>
+    </div>
+  );
+}
+
+
+
+//register page
+// Feature 1 (Sprint 1) - Register UI - Owner: MUNEEM
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+export default function RegisterPage() {
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    try {
+      setBusy(true);
+      await login(form, true);
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="auth-page">
+      <form className="card" onSubmit={submit}>
+        <h2 className="auth-title">Create an account</h2>
+        <p className="lead-muted">New users are created as Student by default.</p>
+        <input placeholder="Name" onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+        <input type="email" placeholder="Email" onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
+        />
+        {error && <p className="error">{error}</p>}
+        <button type="submit" disabled={busy}>
+          {busy ? "Creating account..." : "Register"}
+        </button>
+        <p className="auth-footnote">
+          Already registered? <Link to="/login">Login</Link>
+        </p>
+      </form>
+    </div>
+  );
+}
+
+
+module.exports = router;
+
