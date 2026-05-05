@@ -8,6 +8,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import EventsPage from "./pages/EventsPage";
 import AdminPanelPage from "./pages/AdminPanelPage";
+import ClubManagementPage from "./pages/ClubManagementPage";
 import DiscussionPage from "./pages/DiscussionPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import BlogPage from "./pages/BlogPage";
@@ -15,7 +16,8 @@ import BlogPage from "./pages/BlogPage";
 export default function App() {
   const { auth } = useAuth();
   const location = useLocation();
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage =
+    location.pathname === "/login" || location.pathname === "/register";
   const isLoggedIn = Boolean(auth.user);
 
   if (!isLoggedIn && isAuthPage) {
@@ -87,6 +89,14 @@ export default function App() {
                 element={
                   <ProtectedRoute roles={["Admin", "President"]}>
                     <AdminPanelPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/clubs"
+                element={
+                  <ProtectedRoute roles={["Admin"]}>
+                    <ClubManagementPage />
                   </ProtectedRoute>
                 }
               />

@@ -5,13 +5,15 @@ export default function NavBar() {
   const { auth, logout } = useAuth();
   const role = auth.user?.role;
   const canAdmin = role === "Admin" || role === "President";
+  const isAdmin = role === "Admin";
   const links = [
     { to: "/", label: "Dashboard", end: true },
     { to: "/events", label: "Events" },
     { to: "/blog", label: "Blog" },
     { to: "/discussion", label: "Discussion" },
     ...(canAdmin ? [{ to: "/admin", label: "Admin" }] : []),
-    ...(canAdmin ? [{ to: "/analytics", label: "Analytics" }] : [])
+    ...(isAdmin ? [{ to: "/clubs", label: "Clubs" }] : []),
+    ...(canAdmin ? [{ to: "/analytics", label: "Analytics" }] : []),
   ];
 
   if (!auth.user) {

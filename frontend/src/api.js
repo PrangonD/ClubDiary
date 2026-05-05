@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
-  timeout: 15000
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api",
+  timeout: 15000,
 });
 
 export const setToken = (token) => {
